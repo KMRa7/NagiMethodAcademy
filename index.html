@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>サロン開業マインド診断</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ivory:#fffaf7;
+      --beige:#f3e7de;
+      --beige-deep:#dcc3b2;
+      --pink:#d99aa8;
+      --pink-deep:#bc7688;
+      --pink-light:#f7e2e7;
+      --brown:#6d5249;
+      --brown-soft:#9b8177;
+      --white:#fff;
+      --line:#ead9d2;
+      --shadow:0 14px 34px rgba(112,80,70,.10);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    body{
+      min-height:100vh;
+      padding:18px 12px 46px;
+      font-family:'Noto Sans JP',sans-serif;
+      color:var(--brown);
+      background:
+        radial-gradient(circle at 15% 7%, rgba(247,226,231,.8), transparent 30%),
+        radial-gradient(circle at 88% 26%, rgba(243,231,222,.95), transparent 34%),
+        linear-gradient(180deg,#fffaf7 0%,#fdf7f3 100%);
+    }
+
+    .container{
+      width:min(100%,560px);
+      margin:0 auto;
+    }
+
+    .progress-wrap{
+      margin:0 4px 18px;
+    }
+
+    .progress-info{
+      display:flex;
+      justify-content:space-between;
+      font-size:11px;
+      color:var(--brown-soft);
+      margin-bottom:7px;
+    }
+
+    .progress-track{
+      height:6px;
+      background:#efe2db;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progress-fill{
+      height:100%;
+      width:50%;
+      background:linear-gradient(90deg,var(--beige-deep),var(--pink));
+      border-radius:999px;
+      transition:.3s ease;
+    }
+
+    .screen{display:none}
+    .screen.active{display:block}
+
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(220,195,178,.72);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+    .question-card{
+      padding:22px 18px;
+    }
+
+    .q-label{
+      display:inline-block;
+      margin-bottom:12px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:var(--pink-light);
+      color:var(--pink-deep);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.08em;
+    }
+
+    .question-title{
+      font-family:'Shippori Mincho',serif;
+      font-size:21px;
+      line-height:1.6;
+      color:#73564d;
+      margin-bottom:15px;
+      white-space:pre-line;
+    }
+
+    .instruction{
+      font-size:14px;
+      line-height:1.85;
+      color:#826a61;
+      margin-bottom:18px;
+      white-space:pre-line;
+    }
+
+    .check-list{
+      display:grid;
+      gap:11px;
+    }
+
+    .check-item{
+      display:block;
+      cursor:pointer;
+    }
+
+    .check-item input{
+      position:absolute;
+      opacity:0;
+      pointer-events:none;
+    }
+
+    .check-box{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:15px 14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fffdfb;
+      transition:.2s ease;
+    }
+
+    .fake-check{
+      flex:0 0 auto;
+      width:23px;
+      height:23px;
+      display:grid;
+      place-items:center;
+      margin-top:1px;
+      border:1.5px solid #d8bdb4;
+      border-radius:7px;
+      background:#fff;
+      color:#fff;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .item-text{
+      font-size:14px;
+      line-height:1.75;
+      font-weight:700;
+      color:#72584f;
+      white-space:pre-line;
+    }
+
+    .item-sub{
+      display:block;
+      margin-top:2px;
+      font-size:12px;
+      font-weight:400;
+      line-height:1.7;
+      color:#a0887e;
+    }
+
+    .check-item input:checked + .check-box{
+      border-color:rgba(188,118,136,.68);
+      background:linear-gradient(135deg,#fffafb,#fcedf0);
+      box-shadow:0 6px 18px rgba(188,118,136,.10);
+      transform:translateY(-1px);
+    }
+
+    .check-item input:checked + .check-box .fake-check{
+      background:linear-gradient(135deg,var(--pink),var(--pink-deep));
+      border-color:var(--pink-deep);
+    }
+
+    .check-item input:checked + .check-box .fake-check::before{
+      content:"✓";
+    }
+
+    .button{
+      width:100%;
+      margin-top:20px;
+      padding:15px 18px;
+      border:0;
+      border-radius:999px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .button-primary{
+      color:#fff;
+      background:linear-gradient(135deg,#dca2ae,#bc7688);
+      box-shadow:0 8px 20px rgba(188,118,136,.23);
+    }
+
+    .button-primary:hover{
+      transform:translateY(-2px);
+    }
+
+    .button-secondary{
+      margin-top:10px;
+      color:var(--pink-deep);
+      background:#fff9f7;
+      border:1px solid #dec3c7;
+    }
+
+    .result-card{
+      padding:28px 20px;
+      text-align:center;
+    }
+
+    .result-icon{
+      width:68px;
+      height:68px;
+      margin:0 auto 14px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:linear-gradient(145deg,#fff,#f6e4e8);
+      box-shadow:0 9px 25px rgba(188,118,136,.13);
+      font-size:32px;
+    }
+
+    .result-card h2{
+      font-family:'Shippori Mincho',serif;
+      font-size:20px;
+      line-height:1.6;
+      color:#72564c;
+      margin-bottom:14px;
+    }
+
+    .result-message{
+      text-align:left;
+      padding:18px 16px;
+      border:1px solid #f0dfd8;
+      border-radius:17px;
+      background:#fffaf8;
+      font-size:14px;
+      line-height:2;
+      color:#785f55;
+      white-space:pre-line;
+    }
+
+    .result-message strong{
+      color:var(--pink-deep);
+    }
+
+    @media(max-width:480px){
+      .question-card{padding:19px 14px}
+      .question-title{font-size:19px}
+      .result-card{padding:24px 15px}
+      .result-message{font-size:13px}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="stepText">STEP 1 / 2</span>
+        <span id="progressText">50%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- Q1 -->
+    <section id="q1Screen" class="screen active">
+      <div class="card question-card">
+        <span class="q-label">Q1</span>
+        <div class="question-title">あなたが今、
+一番感じている「不安」は？</div>
+
+        <div class="instruction">当てはまるものに
+チェック（☑）を入れてみましょう！</div>
+
+        <div class="check-list">
+          <label class="check-item">
+            <input type="checkbox" name="q1">
+            <span class="check-box">
+              <span class="fake-check"></span>
+              <span class="item-text">資金面の不安<span class="item-sub">（初期費用やマシン代が高い…）</span></span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" name="q1">
+            <span class="check-box">
+              <span class="fake-check"></span>
+              <span class="item-text">技術面の不安<span class="item-sub">（未経験で覚えられるか不安…）</span></span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" name="q1">
+            <span class="check-box">
+              <span class="fake-check"></span>
+              <span class="item-text">集客・リピートの不安<span class="item-sub">（お客様が通い続けてくれるか…）</span></span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" name="q1">
+            <span class="check-box">
+              <span class="fake-check"></span>
+              <span class="item-text">自分に対する不安<span class="item-sub">（自分にできると思えない…）</span></span>
+            </span>
+          </label>
+        </div>
+
+        <button class="button button-primary" id="q1Button">診断結果を見る</button>
+      </div>
+    </section>
+
+    <!-- Q1 RESULT -->
+    <section id="q1ResultScreen" class="screen">
+      <div class="card result-card">
+        <div class="result-icon" id="q1ResultIcon">💡</div>
+        <h2 id="q1ResultHeading">【アドバイス】</h2>
+        <div class="result-message" id="q1ResultMessage"></div>
+        <button class="button button-primary" id="toQ2Button">Q2へ進む</button>
+        <button class="button button-secondary" id="backQ1Button">Q1に戻る</button>
+      </div>
+    </section>
+
+    <!-- Q2 -->
+    <section id="q2Screen" class="screen">
+      <div class="card question-card">
+        <span class="q-label">Q2</span>
+        <div class="question-title">あなたの中に眠る
+「成功マインド」チェック！</div>
+
+        <div class="instruction">当てはまるものに
+チェック（☑）を入れてみましょう！</div>
+
+        <div class="check-list">
+          <label class="check-item">
+            <input type="checkbox" name="q2">
+            <span class="check-box"><span class="fake-check"></span><span class="item-text">人に「ありがとう」と
+喜んでもらえる仕事がしたい</span></span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" name="q2">
+            <span class="check-box"><span class="fake-check"></span><span class="item-text">自分も綺麗になりながら、
+誰かを綺麗にするのが好き</span></span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" name="q2">
+            <span class="check-box"><span class="fake-check"></span><span class="item-text">自分の手で
+「一生モノの技術」を身につけたい</span></span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" name="q2">
+            <span class="check-box"><span class="fake-check"></span><span class="item-text">大切なお客様と
+深く長く付き合えるサロンを作りたい</span></span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" name="q2">
+            <span class="check-box"><span class="fake-check"></span><span class="item-text">自分のペースや価値観で
+楽しく自由に働きたい</span></span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" name="q2">
+            <span class="check-box"><span class="fake-check"></span><span class="item-text">心のこもった丁寧な
+施術・接客を大切にしたい</span></span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" name="q2">
+            <span class="check-box"><span class="fake-check"></span><span class="item-text">「自分らしく輝いて自立したい」
+という強い想いがある</span></span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" name="q2">
+            <span class="check-box"><span class="fake-check"></span><span class="item-text">未経験でも、正しいやり方が
+分かればチャレンジしたい</span></span>
+          </label>
+        </div>
+
+        <button class="button button-primary" id="q2Button">診断結果を見る</button>
+        <button class="button button-secondary" id="backToQ1ResultButton">前に戻る</button>
+      </div>
+    </section>
+
+    <!-- Q2 RESULT -->
+    <section id="q2ResultScreen" class="screen">
+      <div class="card result-card">
+        <div class="result-icon" id="q2ResultIcon">🌸</div>
+        <h2 id="q2ResultHeading">✨【 診 断 結 果 】✨</h2>
+        <div class="result-message" id="q2ResultMessage"></div>
+        <button class="button button-primary" id="resetButton">もう一度診断する</button>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const screens = ['q1Screen','q1ResultScreen','q2Screen','q2ResultScreen'];
+
+    function showScreen(id, step){
+      screens.forEach(s => document.getElementById(s).classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      const percent = step === 1 ? 50 : 100;
+      document.getElementById('stepText').textContent = `STEP ${step} / 2`;
+      document.getElementById('progressText').textContent = `${percent}%`;
+      document.getElementById('progressFill').style.width = `${percent}%`;
+
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function countChecked(name){
+      return document.querySelectorAll(`input[name="${name}"]:checked`).length;
+    }
+
+    document.getElementById('q1Button').addEventListener('click', () => {
+      const checked = countChecked('q1');
+      const heading = document.getElementById('q1ResultHeading');
+      const icon = document.getElementById('q1ResultIcon');
+      const message = document.getElementById('q1ResultMessage');
+
+      if(checked > 0){
+        icon.textContent = '💡';
+        heading.textContent = '【アドバイス】';
+        message.textContent = `不安の正体は、
+「正しいやり方を知らないこと」です。
+
+確かな技術と知識を身につければ、
+不安はすべて「自信」に変わります！`;
+      }else{
+        icon.textContent = '🌿';
+        heading.textContent = '【診断結果】';
+        message.textContent = `不安が少なかったあなたは、
+サロン開業に向けて前向きな気持ちを持てています✨
+これから技術や知識を身につけることで、
+「やってみたい」が「私にもできる！」に変わっていきます。
+
+大切なのは、不安がないことではなく、
+不安が出てきたときに解決できる準備をしておくこと。
+その気持ちを大切に、
+理想のサロンへの一歩を踏み出しましょう🌿`;
+      }
+
+      showScreen('q1ResultScreen', 1);
+    });
+
+    document.getElementById('toQ2Button').addEventListener('click', () => {
+      showScreen('q2Screen', 2);
+    });
+
+    document.getElementById('backQ1Button').addEventListener('click', () => {
+      showScreen('q1Screen', 1);
+    });
+
+    document.getElementById('backToQ1ResultButton').addEventListener('click', () => {
+      showScreen('q1ResultScreen', 1);
+    });
+
+    document.getElementById('q2Button').addEventListener('click', () => {
+      const checked = countChecked('q2');
+      const heading = document.getElementById('q2ResultHeading');
+      const icon = document.getElementById('q2ResultIcon');
+      const message = document.getElementById('q2ResultMessage');
+
+      if(checked > 0){
+        icon.textContent = '🌸';
+        heading.textContent = '✨【 診 断 結 果 】✨';
+        message.textContent = `1個でもチェックがついたあなたへ！
+
+おめでとうございます！
+あなたには「愛されるサロンオーナー」
+になる素質が十分にあります！
+
+自信を持って大丈夫ですよ🌸`;
+      }else{
+        icon.textContent = '🌿';
+        heading.textContent = '【診断結果】';
+        message.textContent = `まだチェックがつかなかったあなたも大丈夫✨
+今はまだ、サロンオーナーの未来を
+具体的にイメージできていないだけかもしれません。
+「美容が好き」「自分らしく働きたい」
+そんな小さなきっかけからでもOK🌸
+
+これから知識や技術を身につける中で、
+「私もサロンをやってみたい！」という気持ちが
+芽生えることもあります。
+
+あなたの可能性は、
+今のチェック数だけでは決まりません✨`;
+      }
+
+      showScreen('q2ResultScreen', 2);
+    });
+
+    document.getElementById('resetButton').addEventListener('click', () => {
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+      showScreen('q1Screen', 1);
+    });
+  </script>
+</body>
+</html>
