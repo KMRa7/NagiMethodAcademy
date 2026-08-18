@@ -292,7 +292,7 @@
 
         <div class="check-list">
           <label class="check-item">
-            <input type="checkbox" name="q1">
+            <input type="checkbox" name="q1" value="資金面の不安">
             <span class="check-box">
               <span class="fake-check"></span>
               <span class="item-text">資金面の不安<span class="item-sub">（初期費用やマシン代が高い…）</span></span>
@@ -300,7 +300,7 @@
           </label>
 
           <label class="check-item">
-            <input type="checkbox" name="q1">
+            <input type="checkbox" name="q1" value="技術面の不安">
             <span class="check-box">
               <span class="fake-check"></span>
               <span class="item-text">技術面の不安<span class="item-sub">（未経験で覚えられるか不安…）</span></span>
@@ -308,7 +308,7 @@
           </label>
 
           <label class="check-item">
-            <input type="checkbox" name="q1">
+            <input type="checkbox" name="q1" value="集客・リピートの不安">
             <span class="check-box">
               <span class="fake-check"></span>
               <span class="item-text">集客・リピートの不安<span class="item-sub">（お客様が通い続けてくれるか…）</span></span>
@@ -316,7 +316,7 @@
           </label>
 
           <label class="check-item">
-            <input type="checkbox" name="q1">
+            <input type="checkbox" name="q1" value="自分に対する不安">
             <span class="check-box">
               <span class="fake-check"></span>
               <span class="item-text">自分に対する不安<span class="item-sub">（自分にできると思えない…）</span></span>
@@ -335,7 +335,7 @@
         <h2 id="q1ResultHeading">【アドバイス】</h2>
         <div class="result-message" id="q1ResultMessage"></div>
         <button class="button button-primary" id="toQ2Button">Q2へ進む</button>
-        <button class="button button-secondary" id="backQ1Button">Q1に戻る</button>
+        
       </div>
     </section>
 
@@ -351,49 +351,49 @@
 
         <div class="check-list">
           <label class="check-item">
-            <input type="checkbox" name="q2">
+            <input type="checkbox" name="q2" value="人に「ありがとう」と喜んでもらえる仕事がしたい">
             <span class="check-box"><span class="fake-check"></span><span class="item-text">人に「ありがとう」と
 喜んでもらえる仕事がしたい</span></span>
           </label>
 
           <label class="check-item">
-            <input type="checkbox" name="q2">
+            <input type="checkbox" name="q2" value="自分も綺麗になりながら、誰かを綺麗にするのが好き">
             <span class="check-box"><span class="fake-check"></span><span class="item-text">自分も綺麗になりながら、
 誰かを綺麗にするのが好き</span></span>
           </label>
 
           <label class="check-item">
-            <input type="checkbox" name="q2">
+            <input type="checkbox" name="q2" value="自分の手で「一生モノの技術」を身につけたい">
             <span class="check-box"><span class="fake-check"></span><span class="item-text">自分の手で
 「一生モノの技術」を身につけたい</span></span>
           </label>
 
           <label class="check-item">
-            <input type="checkbox" name="q2">
+            <input type="checkbox" name="q2" value="大切なお客様と深く長く付き合えるサロンを作りたい">
             <span class="check-box"><span class="fake-check"></span><span class="item-text">大切なお客様と
 深く長く付き合えるサロンを作りたい</span></span>
           </label>
 
           <label class="check-item">
-            <input type="checkbox" name="q2">
+            <input type="checkbox" name="q2" value="自分のペースや価値観で楽しく自由に働きたい">
             <span class="check-box"><span class="fake-check"></span><span class="item-text">自分のペースや価値観で
 楽しく自由に働きたい</span></span>
           </label>
 
           <label class="check-item">
-            <input type="checkbox" name="q2">
+            <input type="checkbox" name="q2" value="心のこもった丁寧な施術・接客を大切にしたい">
             <span class="check-box"><span class="fake-check"></span><span class="item-text">心のこもった丁寧な
 施術・接客を大切にしたい</span></span>
           </label>
 
           <label class="check-item">
-            <input type="checkbox" name="q2">
+            <input type="checkbox" name="q2" value="「自分らしく輝いて自立したい」という強い想いがある">
             <span class="check-box"><span class="fake-check"></span><span class="item-text">「自分らしく輝いて自立したい」
 という強い想いがある</span></span>
           </label>
 
           <label class="check-item">
-            <input type="checkbox" name="q2">
+            <input type="checkbox" name="q2" value="未経験でも、正しいやり方が分かればチャレンジしたい">
             <span class="check-box"><span class="fake-check"></span><span class="item-text">未経験でも、正しいやり方が
 分かればチャレンジしたい</span></span>
           </label>
@@ -410,13 +410,36 @@
         <div class="result-icon" id="q2ResultIcon">🌸</div>
         <h2 id="q2ResultHeading">✨【 診 断 結 果 】✨</h2>
         <div class="result-message" id="q2ResultMessage"></div>
-        <button class="button button-primary" id="resetButton">もう一度診断する</button>
+        <button class="button button-primary" id="sendResultButton">診断結果を送信する</button>
       </div>
     </section>
 
   </div>
 
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+
   <script>
+    const LIFF_ID = '2010325512-bcfJev7g';
+    let liffReady = false;
+
+    async function initLiff(){
+      if(typeof liff === 'undefined'){
+        console.error('LIFF SDK未読み込み');
+        return false;
+      }
+
+      try{
+        await liff.init({ liffId: LIFF_ID });
+        liffReady = true;
+        return true;
+      }catch(e){
+        liffReady = false;
+        console.error('LIFF初期化失敗:', e);
+        alert('LINE連携の初期化に失敗しました。LIFF IDやエンドポイントURLをご確認ください。');
+        return false;
+      }
+    }
+
     const screens = ['q1Screen','q1ResultScreen','q2Screen','q2ResultScreen'];
 
     function showScreen(id, step){
@@ -469,12 +492,7 @@
     document.getElementById('toQ2Button').addEventListener('click', () => {
       showScreen('q2Screen', 2);
     });
-
-    document.getElementById('backQ1Button').addEventListener('click', () => {
-      showScreen('q1Screen', 1);
-    });
-
-    document.getElementById('backToQ1ResultButton').addEventListener('click', () => {
+document.getElementById('backToQ1ResultButton').addEventListener('click', () => {
       showScreen('q1ResultScreen', 1);
     });
 
@@ -514,10 +532,69 @@
       showScreen('q2ResultScreen', 2);
     });
 
-    document.getElementById('resetButton').addEventListener('click', () => {
-      document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
-      showScreen('q1Screen', 1);
-    });
+    function getCheckedValues(name){
+      return Array.from(
+        document.querySelectorAll(`input[name="${name}"]:checked`)
+      ).map(input => input.value);
+    }
+
+    function buildLineMessage(){
+      const q1 = getCheckedValues('q1');
+      const q2 = getCheckedValues('q2');
+
+      const q1Result = q1.length > 0
+        ? `Q1. あなたが今、一番感じている「不安」は？
+${q1.map(v => `・${v}`).join('\n')}`
+        : `Q1. あなたが今、一番感じている「不安」は？
+・チェックなし`;
+
+      const q2Result = q2.length > 0
+        ? `Q2. あなたの中に眠る「成功マインド」チェック！
+${q2.map(v => `・${v}`).join('\n')}`
+        : `Q2. あなたの中に眠る「成功マインド」チェック！
+・チェックなし`;
+
+      return `【診断回答結果】
+
+${q1Result}
+
+${q2Result}`;
+    }
+
+    async function sendResultToLine(){
+      const ok = liffReady || await initLiff();
+      if(!ok) return;
+
+      try{
+        if(!liff.isLoggedIn()){
+          liff.login();
+          return;
+        }
+
+        if(!liff.isInClient()){
+          alert('LINEアプリ内で開くと、診断結果を公式LINEへ送信できます。');
+          return;
+        }
+
+        const message = buildLineMessage();
+
+        await liff.sendMessages([
+          {
+            type: 'text',
+            text: message
+          }
+        ]);
+
+        liff.closeWindow();
+      }catch(e){
+        console.error('LINE送信失敗:', e);
+        alert('診断結果の送信に失敗しました。もう一度お試しください。');
+      }
+    }
+
+    document.getElementById('sendResultButton').addEventListener('click', sendResultToLine);
+
+    window.addEventListener('load', initLiff);
   </script>
 </body>
 </html>
